@@ -9,13 +9,11 @@ import type { Neighborhood, SearchFilters, SortOrder } from "@/lib/types";
 type Props = {
   neighborhoods: Neighborhood[];
   defaults?: SearchFilters;
-  variant?: "hero" | "page";
 };
 
-export function SearchForm({ neighborhoods, defaults = DEFAULT_FILTERS, variant = "page" }: Props) {
+export function SearchForm({ neighborhoods, defaults = DEFAULT_FILTERS }: Props) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
-  const isHero = variant === "hero";
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,46 +29,15 @@ export function SearchForm({ neighborhoods, defaults = DEFAULT_FILTERS, variant 
     );
   }
 
-  const applyOnChange = isHero ? undefined : () => formRef.current?.requestSubmit();
-
-  const bairroSelect = (
-    <SelectField icon={<MapPin className="size-4" aria-hidden />}>
-      <select
-        name="bairro"
-        defaultValue={defaults.bairro}
-        onChange={applyOnChange}
-        aria-label="Bairro"
-        className={selectClass}
-      >
-        <option value="">Todos os bairros</option>
-        {neighborhoods.map((n) => (
-          <option key={n.slug} value={n.slug}>
-            {n.name}
-          </option>
-        ))}
-      </select>
-    </SelectField>
-  );
+  const applyOnChange = () => formRef.current?.requestSubmit();
 
   return (
     <form ref={formRef} role="search" action="/busca" method="get" onSubmit={handleSubmit}>
-      {!isHero && (
-        <>
-          {defaults.categoria && (
-            <input type="hidden" name="categoria" value={defaults.categoria} />
-          )}
-          {defaults.estoque && <input type="hidden" name="estoque" value="1" />}
-        </>
-      )}
+      {defaults.categoria && <input type="hidden" name="categoria" value={defaults.categoria} />}
+      {defaults.estoque && <input type="hidden" name="estoque" value="1" />}
 
-      <div
-        className={
-          isHero
-            ? "flex flex-col gap-2 rounded-2xl bg-white p-2 shadow-xl sm:flex-row"
-            : "space-y-2"
-        }
-      >
-        <div className="flex flex-1 gap-2">
+      <div className="space-y-2">
+        <div className="flex gap-2">
           <label className="relative flex-1">
             <span className="sr-only">O que você procura?</span>
             <Search
@@ -88,32 +55,40 @@ export function SearchForm({ neighborhoods, defaults = DEFAULT_FILTERS, variant 
               className="h-12 w-full rounded-xl border border-stone-200 bg-white pr-3 pl-10 text-base text-stone-900 placeholder:text-stone-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none"
             />
           </label>
-          {!isHero && <SubmitButton />}
+          <SubmitButton />
         </div>
 
-        {isHero ? (
-          <>
-            <div className="sm:w-56">{bairroSelect}</div>
-            <SubmitButton />
-          </>
-        ) : (
-          <div className="grid grid-cols-[6fr_5fr] gap-2">
-            {bairroSelect}
-            <SelectField icon={<ArrowUpDown className="size-4" aria-hidden />}>
-              <select
-                name="ordem"
-                defaultValue={defaults.ordem}
-                onChange={applyOnChange}
-                aria-label="Ordenar por"
-                className={selectClass}
-              >
-                <option value="relevancia">Relevância</option>
-                <option value="menor-preco">Menor preço</option>
-                <option value="maior-preco">Maior preço</option>
-              </select>
-            </SelectField>
-          </div>
-        )}
+        <div className="grid grid-cols-[6fr_5fr] gap-2">
+          <SelectField icon={<MapPin className="size-4" aria-hidden />}>
+            <select
+              name="bairro"
+              defaultValue={defaults.bairro}
+              onChange={applyOnChange}
+              aria-label="Bairro"
+              className={selectClass}
+            >
+              <option value="">Todos os bairros</option>
+              {neighborhoods.map((n) => (
+                <option key={n.slug} value={n.slug}>
+                  {n.name}
+                </option>
+              ))}
+            </select>
+          </SelectField>
+          <SelectField icon={<ArrowUpDown className="size-4" aria-hidden />}>
+            <select
+              name="ordem"
+              defaultValue={defaults.ordem}
+              onChange={applyOnChange}
+              aria-label="Ordenar por"
+              className={selectClass}
+            >
+              <option value="relevancia">Relevância</option>
+              <option value="menor-preco">Menor preço</option>
+              <option value="maior-preco">Maior preço</option>
+            </select>
+          </SelectField>
+        </div>
       </div>
     </form>
   );

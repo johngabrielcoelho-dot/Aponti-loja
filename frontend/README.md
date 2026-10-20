@@ -39,7 +39,7 @@ para o Git, exceto o `.env.example`.
 
 | Rota                                            | O que tem                                                                                                                                               |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                                             | Busca por termo + bairro, 9 categorias do MVP, bairros com lojas, destaques e "Como funciona"                                                           |
+| `/`                                             | Atalhos "Mais buscados", 9 categorias do MVP, bairros com lojas, destaques e "Como funciona"                                                            |
 | `/busca?q=&categoria=&bairro=&estoque=1&ordem=` | Resultados com filtros por categoria, bairro, "só com estoque" e ordenação por preço                                                                    |
 | `/produto/[slug]`                               | Fotos (galeria com deslize), preço, estoque, loja, endereço, horário/"aberto agora", **Falar com a loja** (WhatsApp), Ligar e Como chegar (Google Maps) |
 

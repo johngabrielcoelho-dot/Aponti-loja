@@ -2,13 +2,7 @@ import Link from "next/link";
 import { ArrowRight, MapPin, PackageCheck, Search, Store } from "lucide-react";
 import { CategoryIcon, categoryStyle } from "@/components/category-icon";
 import { ProductGrid } from "@/components/product-card";
-import { SearchForm } from "@/components/search-form";
-import {
-  getCategories,
-  getFeaturedProducts,
-  getNeighborhoods,
-  getNeighborhoodsWithStores,
-} from "@/lib/catalog";
+import { getCategories, getFeaturedProducts, getNeighborhoodsWithStores } from "@/lib/catalog";
 import { buildSearchHref } from "@/lib/search-params";
 
 const SUGESTOES = ["tênis", "ventilador", "ração", "celular", "protetor solar"];
@@ -47,11 +41,7 @@ export default async function HomePage() {
             Veja quais lojas da cidade têm o produto, reserve sem pagar online e retire na loja.
           </p>
 
-          <div className="mt-6 max-w-3xl">
-            <SearchForm neighborhoods={getNeighborhoods()} variant="hero" />
-          </div>
-
-          <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
+          <div className="mt-6 flex flex-wrap items-center gap-2 text-sm">
             <span className="text-brand-100">Mais buscados:</span>
             {SUGESTOES.map((termo) => (
               <Link
