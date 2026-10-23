@@ -17,6 +17,9 @@ npm run format        # formata tudo com o Prettier
 npm run format:check  # só verifica a formatação (para o CI)
 ```
 
+No **Prompt de Comando (cmd)** do Windows, troque o `cp` por `copy .env.example .env.local`. No
+PowerShell e no Git Bash o `cp` funciona.
+
 ## Variáveis de ambiente
 
 | Variável               | Para que serve                                                               | Padrão                  |
@@ -43,7 +46,8 @@ para o Git, exceto o `.env.example`.
 | `/busca?q=&categoria=&bairro=&estoque=1&ordem=` | Resultados com filtros por categoria, bairro, "só com estoque" e ordenação por preço                                                                    |
 | `/produto/[slug]`                               | Fotos (galeria com deslize), preço, estoque, loja, endereço, horário/"aberto agora", **Falar com a loja** (WhatsApp), Ligar e Como chegar (Google Maps) |
 
-A busca ignora acentos e plural simples (`tenis nike 42` encontra "Tênis Nike Revolution 7").
+A busca por termo fica em `/busca`, aberta pelo botão **Buscar** no topo de todas as páginas.
+Ela ignora acentos e plural simples (`tenis nike 42` encontra "Tênis Nike Revolution 7").
 Os filtros ficam na URL, então os links podem ser compartilhados e funcionam sem JavaScript.
 
 ## Estrutura
@@ -71,6 +75,11 @@ As "fotos" atuais são ilustrações por categoria; fotos reais dos lojistas ent
 
 ## Decisões
 
+- **Busca fora da tela inicial.** A home tinha um campo de busca grande, removido no commit
+  "refactor(frontend): remove o buscador grande da tela inicial". A busca por termo continua em `/busca`, pelo botão **Buscar** do topo, e a home mantém
+  os atalhos "Mais buscados", as categorias e os bairros. A issue #9 pede "tela inicial com busca
+  por termo": se a revisão pedir o campo na home de novo, o componente `SearchForm` já existe e
+  basta usá-lo em `src/app/page.tsx`.
 - **Dados fictícios.** Lojas, produtos e endereços em `src/data` são inventados. Os números de
   WhatsApp usam o prefixo `9 0000`, que não existe em celulares, para ninguém receber mensagens
   por engano. Os nomes de bairros são de Petrolina (`src/data/neighborhoods.ts`); confira se falta
@@ -106,6 +115,13 @@ As "fotos" atuais são ilustrações por categoria; fotos reais dos lojistas ent
   só vale após a loja confirmar, prazo de retirada e consentimento LGPD.
 - **#5 e #11 API:** trocar os mocks em `src/lib/catalog.ts` por chamadas à API, levar a busca para
   o back-end e adicionar a URL da API no `.env.example`.
+- **Cabeçalhos de segurança HTTP:** hoje o servidor não envia nenhum e ainda anuncia
+  `X-Powered-By: Next.js`. Configure no `next.config.ts`: `poweredByHeader: false` e, em
+  `headers()`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`,
+  `Referrer-Policy: strict-origin-when-cross-origin` e `Permissions-Policy`. Uma
+  `Content-Security-Policy` completa pode vir depois, junto com o Nginx. HSTS e HTTPS ficam no
+  Nginx, em produção.
+- **Fotos enviadas por lojistas:** aceite só JPG, PNG ou WebP. SVG pode conter scripts.
 - **SEO local:** páginas próprias por categoria, bairro e loja (ex.: `/bairro/centro`) ainda não
   existem.
 - **Página de status (Health Check)** que consulta a API: desafio de DevOps do front-end, ainda não
