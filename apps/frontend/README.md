@@ -5,10 +5,12 @@ em **Next.js 16 + TypeScript + Tailwind CSS 4**.
 
 ## Como rodar
 
-Requer **Node.js 20.9 ou mais novo** (veja o `.nvmrc` na raiz).
+Requer **Node.js 20.9 ou mais novo** (veja o `.nvmrc` na raiz). Este app faz parte dos npm
+workspaces do repositório: rode `npm install` na **raiz**. Os outros comandos funcionam tanto
+nesta pasta quanto na raiz.
 
 ```bash
-npm install
+npm install           # na raiz do repositório
 cp .env.example .env.local
 npm run dev           # http://localhost:3000
 npm run build         # build de produção (o CI deve rodar este comando)
